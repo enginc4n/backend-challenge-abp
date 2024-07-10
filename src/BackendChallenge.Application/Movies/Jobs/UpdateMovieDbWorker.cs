@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
 using BackendChallenge.Entities;
 using BackendChallenge.Tmdb;
+using BackendChallenge.Tmdb.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -19,11 +21,31 @@ public class UpdateMovieDbWorker : AsyncPeriodicBackgroundWorkerBase, ISingleton
   {
     _movieReposityory = movieReposityory;
     _tmdbAppService = tmdbAppService;
-    Timer.Period = 60000;
+    Timer.Period = (int)TimeSpan.FromHours(6).TotalMilliseconds;
   }
 
-  protected override Task DoWorkAsync()
+  protected override async Task DoWorkAsync()
   {
-    _tmdbAppService.GetMoviesByPageAsync()
+    int currentPage = 1;
+    int totalPages = 1;
+    while (currentPage <= totalPages)
+    {
+      try
+      {
+        ApiResponse moviesData = await _tmdbAppService.GetMoviesByPageAsync(currentPage);
+        totalPages = moviesData.TotalPages;
+        foreach (Movie movie in moviesData.Results)
+        {
+          await _movieReposityory.InsertOrUpdateAsync(movie);
+        }
+
+        currentPage++;
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        throw;
+      }
+    }
   }
 }
