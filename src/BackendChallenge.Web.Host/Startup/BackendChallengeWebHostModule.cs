@@ -1,5 +1,4 @@
-﻿using Abp.Hangfire.Configuration;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -18,11 +17,6 @@ namespace BackendChallenge.Web.Host.Startup
     {
       _env = env;
       _appConfiguration = env.GetAppConfiguration();
-    }
-
-    public override void PreInitialize()
-    {
-      Configuration.BackgroundJobs.UseHangfire();
     }
 
     public override void Initialize()
