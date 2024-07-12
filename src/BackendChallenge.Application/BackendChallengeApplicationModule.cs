@@ -2,9 +2,7 @@
 using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
-using Abp.Threading.BackgroundWorkers;
 using BackendChallenge.Authorization;
-using BackendChallenge.Movies.Jobs;
 
 namespace BackendChallenge;
 
@@ -16,9 +14,7 @@ public class BackendChallengeApplicationModule : AbpModule
   public override void PreInitialize()
   {
     Configuration.Authorization.Providers.Add<BackendChallengeAuthorizationProvider>();
-
-    IBackgroundWorkerManager workerManager = IocManager.Resolve<IBackgroundWorkerManager>();
-    workerManager.Add(IocManager.Resolve<UpdateMovieDbWorker>());
+    Configuration.BackgroundJobs.IsJobExecutionEnabled = true;
   }
 
   public override void Initialize()
@@ -32,5 +28,11 @@ public class BackendChallengeApplicationModule : AbpModule
         // Scan the assembly for classes which inherit from AutoMapper.Profile
         cfg => cfg.AddMaps(thisAssembly)
       );
+  }
+
+  public override void PostInitialize()
+  {
+    // IBackgroundWorkerManager workerManager = IocManager.Resolve<IBackgroundWorkerManager>();
+    // workerManager.Add(IocManager.Resolve<UpdateMovieDbWorker>());
   }
 }

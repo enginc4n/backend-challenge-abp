@@ -17,7 +17,7 @@ namespace BackendChallenge.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -1083,6 +1083,10 @@ namespace BackendChallenge.Migrations
                         .HasMaxLength(96)
                         .HasColumnType("nvarchar(96)");
 
+                    b.Property<string>("TargetNotifiers")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
@@ -1571,6 +1575,58 @@ namespace BackendChallenge.Migrations
                     b.HasIndex("TenantId", "NormalizedUserName");
 
                     b.ToTable("AbpUsers");
+                });
+
+            modelBuilder.Entity("BackendChallenge.Entities.Movie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool?>("Adult")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BackdropPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GenreIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalLanguage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Overview")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Popularity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PosterPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Video")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("VoteAverage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("VoteCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("movies");
                 });
 
             modelBuilder.Entity("BackendChallenge.MultiTenancy.Tenant", b =>

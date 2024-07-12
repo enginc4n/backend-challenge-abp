@@ -1,27 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Application.Services;
-using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using BackendChallenge.Entities;
 using BackendChallenge.Movies.Dto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BackendChallenge.Movies;
 
-public class MovieAppService : AsyncCrudAppService<Movie, MovieDto, int, MovieListRequestDto, CreateUpdateMovieDto>, IMovieAppService
+[Route("api/movie")]
+public class MovieAppService : ApplicationService, IMovieAppService
 {
-  public MovieAppService(IRepository<Movie, int> repository) : base(repository)
+  private readonly IRepository<Movie> _movieRepository;
+
+  public MovieAppService(IRepository<Movie> movieRepository)
   {
+    _movieRepository = movieRepository;
   }
 
-  public async Task<PagedResultDto<MovieDto>> GetPagedSortedMoviesAsync(MovieListRequestDto input)
+  [HttpPost("create")]
+  public async Task<MovieDto> CreateMovie(CreateMovieDto input)
   {
-    IQueryable<Movie> query = Repository.GetAll();
-    query = ApplySorting(query, input);
-    int totalCount = await AsyncQueryableExecuter.CountAsync(query);
-    query = ApplyPaging(query, input);
-    List<Movie> movies = await AsyncQueryableExecuter.ToListAsync(query);
-    return new PagedResultDto<MovieDto>(totalCount, ObjectMapper.Map<List<MovieDto>>(movies));
+    Movie createdMovie = ObjectMapper.Map<Movie>(input);
+    await _movieRepository.InsertAsync(createdMovie);
+    await CurrentUnitOfWork.SaveChangesAsync();
+    return ObjectMapper.Map<MovieDto>(createdMovie);
   }
 }

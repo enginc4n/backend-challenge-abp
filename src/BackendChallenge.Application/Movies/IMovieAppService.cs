@@ -5,7 +5,6 @@ using BackendChallenge.Movies.Dto;
 
 namespace BackendChallenge.Movies;
 
-public interface IMovieAppService : IAsyncCrudAppService<MovieDto, int, MovieListRequestDto, CreateUpdateMovieDto>
+public interface IMovieAppService : IApplicationService
 {
-  Task<PagedResultDto<MovieDto>> GetPagedSortedMoviesAsync(MovieListRequestDto input);
 }

@@ -8,12 +8,10 @@ using Abp.AspNetCore.Configuration;
 using Abp.AspNetCore.SignalR;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
-using Abp.Threading.BackgroundWorkers;
 using Abp.Zero.Configuration;
 using BackendChallenge.Authentication.JwtBearer;
 using BackendChallenge.Configuration;
 using BackendChallenge.EntityFrameworkCore;
-using BackendChallenge.Movies.Jobs;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace BackendChallenge
@@ -74,8 +72,6 @@ namespace BackendChallenge
     {
       IocManager.Resolve<ApplicationPartManager>()
         .AddApplicationPartsIfNotAddedBefore(typeof(BackendChallengeWebCoreModule).Assembly);
-      IocManager.Resolve<IBackgroundWorkerManager>()
-        .Add(IocManager.Resolve<UpdateMovieDbWorker>());
     }
   }
 }
