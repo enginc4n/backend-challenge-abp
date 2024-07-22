@@ -24,5 +24,6 @@ public class MovieAppService : ApplicationService, IMovieAppService
     await _movieRepository.InsertAsync(createdMovie);
     await CurrentUnitOfWork.SaveChangesAsync();
     return ObjectMapper.Map<MovieDto>(createdMovie);
+    //deneme 2
   }
 }
