@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace BackendChallenge.Movies.Dto;
 
-public class MovieDto : EntityDto
+public class MovieDt : EntityDto
 {
   public string Title { get; set; }
   public DateTime? ReleaseDate { get; set; }
