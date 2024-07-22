@@ -25,4 +25,11 @@ public class MovieAppService : ApplicationService, IMovieAppService
     await CurrentUnitOfWork.SaveChangesAsync();
     return ObjectMapper.Map<MovieDto>(createdMovie);
   }
+
+  [HttpPost("getbyid/{id}")]
+  public async Task<MovieDto> GetMovieById(int id)
+  {
+    Movie requestedMovie = await _movieRepository.GetAsync(id);
+    return null;
+  }
 }
